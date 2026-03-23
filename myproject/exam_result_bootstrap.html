@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Exam Result</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header text-center bg-success text-white">
+                <h2>Exam Result for {{ course.name }}</h2>
+            </div>
+            <div class="card-body text-center">
+                <h1 class="display-4 text-success">Congratulations!</h1>
+                <p class="lead">You have successfully completed the exam.</p>
+                
+                <div class="alert alert-info">
+                    <h3>Your Total Score: <strong>{{ total_score }}</strong></h3>
+                </div>
+
+                <hr>
+                <h4 class="text-left">Detailed Results:</h4>
+                <ul class="list-group text-left">
+                    {% for result in results %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ result.question.question_text }}
+                        {% if result.is_correct %}
+                            <span class="badge badge-success">Correct</span>
+                        {% else %}
+                            <span class="badge badge-danger">Incorrect</span>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+
+                <a href="{% url 'onlinecourse:index' %}" class="btn btn-primary mt-4">Back to Home</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
