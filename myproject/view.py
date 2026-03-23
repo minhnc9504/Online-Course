@@ -72,4 +72,28 @@ def show_exam_result(request, submission_id):
         'total_score': total_score,
         'results': results,
     }
+    def show_exam_result(request, submission_id):
+    submission = get_object_or_404(Submission, pk=submission_id)
+    course = submission.enrollment.course
+    questions = Question.objects.filter(course=course)
+    
+    # Lấy danh sách ID đã chọn
+    selected_ids = [choice.id for choice in submission.choices.all()]
+    
+    total_score = 0
+    for question in questions:
+        if question.is_get_score(selected_ids):
+            total_score += question.grade
+            
+    # Tính tổng điểm tối đa có thể đạt được (possible)
+    possible_score = sum([q.grade for q in questions])
+
+    context = {
+        'course': course,
+        'total_score': total_score,
+        'selected_ids': selected_ids, # BẮT BUỘC CÓ
+        'possible': possible_score,   # BẮT BUỘC CÓ
+        'submission': submission
+    }
+    return render(request, 'onlinecourse/exam_result_bootstrap.html', context)
     return render(request, 'onlinecourse/exam_result_bootstrap.html', context)
